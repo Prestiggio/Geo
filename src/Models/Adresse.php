@@ -23,7 +23,7 @@ class Adresse extends Model {
 			}
 		}
 		
-		if(!$country)
+		if(!isset($country))
 			$country = Country::firstOrCreate($attributes["ville"]["country"]);
 		
 		$attributes["ville"]["country_id"] = $country->id;
@@ -40,7 +40,7 @@ class Adresse extends Model {
 			}
 		}
 		
-		if(!$ville)
+		if(!isset($ville))
 			$ville = Ville::firstOrCreate($attributes["ville"]);
 		
 		$attributes["ville_id"] = $ville->id;
@@ -60,7 +60,7 @@ class Adresse extends Model {
 			}
 		}
 		
-		if(!$address)
+		if(!isset($address))
 			$address = static::firstOrCreate($attributes);
 		
 		Model::reguard();
