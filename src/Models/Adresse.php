@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Adresse extends Model {
 
+	protected $with = ["ville"];
+	
 	public function ville() {
 		return $this->belongsTo("Ry\Geo\Models\Ville", "ville_id");
 	}
@@ -11,19 +13,55 @@ class Adresse extends Model {
 	public static function firstOrCreateFromBulk(array $attributes) {
 		Model::unguard();
 		
-		$country = Country::firstOrCreate($attributes["city"]["country"]);
+		if(isset($attributes["ville"]["country"])) {
+			if(isset($attributes["ville"]["country"]["id"]) && $attributes["ville"]["country"]["id"]>0) {
+				$country = Country::where("id", "=", $attributes["ville"]["country"]["id"])->first();
+				if($country) {
+					$country->nom = $attributes["ville"]["country"]["nom"];
+					$country->save();
+				}
+			}
+		}
 		
-		$attributes["city"]["country_id"] = $country->id;
+		if(!$country)
+			$country = Country::firstOrCreate($attributes["ville"]["country"]);
 		
-		unset($attributes["city"]["country"]);
+		$attributes["ville"]["country_id"] = $country->id;
 		
-		$ville = Ville::firstOrCreate($attributes["city"]);
+		unset($attributes["ville"]["country"]);
+		
+		if(isset($attributes["ville"]["id"]) && $attributes["ville"]["id"]>0) {
+			$ville = Ville::where("id", "=", $attributes["ville"]["id"])->first();
+			if($ville) {
+				$ville->nom = $attributes["ville"]["nom"];
+				$ville->cp = $attributes["ville"]["cp"];
+				$ville->country_id = $attributes["ville"]["country_id"];
+				$ville->save();
+			}
+		}
+		
+		if(!$ville)
+			$ville = Ville::firstOrCreate($attributes["ville"]);
 		
 		$attributes["ville_id"] = $ville->id;
 		
-		unset($attributes["city"]);
+		unset($attributes["ville"]);
 		
-		$address = static::firstOrCreate($attributes);
+		if(isset($attributes["id"]) && $attributes["id"]>0) {
+			$address = Adresse::where("id", "=", $attributes["id"])->first();
+			if($address) {
+				$address->raw = $attributes["raw"];
+				$address->ville_id = $attributes["ville_id"];
+				if(isset($attributes["lat"]))
+					$address->lat = $attributes["lat"];
+				if(isset($attributes["lng"]))
+					$address->lng = $attributes["lng"];
+				$address->save();
+			}
+		}
+		
+		if(!$address)
+			$address = static::firstOrCreate($attributes);
 		
 		Model::reguard();
 		

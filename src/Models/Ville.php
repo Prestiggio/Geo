@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ville extends Model {
 
+	protected $with = ["country"];
+	
 	public function country() {
 		return $this->belongsTo("Ry\Geo\Models\Country", "country_id");
 	}
