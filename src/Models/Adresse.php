@@ -6,6 +6,8 @@ class Adresse extends Model {
 
 	protected $with = ["ville"];
 	
+	protected $table = "ry_geo_adresses";
+	
 	public function ville() {
 		return $this->belongsTo("Ry\Geo\Models\Ville", "ville_id");
 	}

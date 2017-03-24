@@ -12,7 +12,7 @@ class Country extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('countries', function(Blueprint $table)
+		Schema::create('ry_geo_countries', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->char("nom");
@@ -27,7 +27,7 @@ class Country extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('countries');
+		Schema::drop('ry_geo_countries');
 	}
 
 }

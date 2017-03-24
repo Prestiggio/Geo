@@ -4,6 +4,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ville extends Model {
 
+	protected $table = "ry_geo_villes";
+	
 	protected $with = ["country"];
 	
 	public function country() {

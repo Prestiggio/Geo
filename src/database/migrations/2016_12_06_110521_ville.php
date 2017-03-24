@@ -12,7 +12,7 @@ class Ville extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('villes', function(Blueprint $table)
+		Schema::create('ry_geo_villes', function(Blueprint $table)
 		{
 			$table->increments('id');
 			$table->char("nom");
@@ -29,7 +29,7 @@ class Ville extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('villes');
+		Schema::drop('ry_geo_villes');
 	}
 
 }
