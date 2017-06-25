@@ -1,5 +1,7 @@
-<?php 
-Route::get("ry/geo/ngmodel", function(){
-	return view("rygeo::ngmodel");
+<?php
+Route::group(["middleware" => ["bot", "botex"]], function(){
+	Route::controller("ry/geo/bot", "BotController");
 });
+Route::get("ry/geo/{country}/villes", "PublicController@villes");
+Route::controller("ry/geo", "PublicController");
 ?>

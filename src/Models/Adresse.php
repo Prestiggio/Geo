@@ -1,6 +1,7 @@
 <?php namespace Ry\Geo\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Collection;
 
 class Adresse extends Model {
 
@@ -68,6 +69,28 @@ class Adresse extends Model {
 		Model::reguard();
 		
 		return $address;
+	}
+	
+	public static function locate($ar) {
+		if(isset($ar["ville"]) && isset($ar["ville"]["id"])) {
+			return self::where("ville_id", "=", $ar["ville"]["id"])->get();
+		}
+		elseif(isset($ar["country"]) && isset($ar["country"]["id"])) {
+			$country = Country::where("id", "=", $ar["country"]["id"])->first();
+			$ar = [];
+			foreach($country->villes as $ville) {
+				foreach($ville->adresses as $adresse) {
+					$ar[] = $adresse;
+				}
+			}
+			return new Collection($ar);
+		}
+		return [];
+	}
+	
+	public static function form($form, $model) {
+		$form->where();
+		$form->expect(action("\Ry\Geo\Http\Controllers\BotController@postPosition") . "?model=" . $model);
 	}
 
 }

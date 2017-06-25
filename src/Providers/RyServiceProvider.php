@@ -4,6 +4,8 @@ namespace Ry\Geo\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
+use Ry\Geo\Models\Country;
+use Ry\Geo\Models\Ville;
 
 class RyServiceProvider extends ServiceProvider
 {
@@ -42,6 +44,9 @@ class RyServiceProvider extends ServiceProvider
     	$this->map();
     	//$kernel = $this->app['Illuminate\Contracts\Http\Kernel'];
     	//$kernel->pushMiddleware('Ry\Facebook\Http\Middleware\Facebook');
+    	
+    	app("ryanalytics.slug")->register("country", Country::class);
+    	app("ryanalytics.slug")->register("ville", Ville::class);
     }
 
     /**
@@ -51,6 +56,7 @@ class RyServiceProvider extends ServiceProvider
      */
     public function register()
     {
+    	$this->app->register(\Ry\Socin\Providers\RyServiceProvider::class);
     }
     public function map()
     {    	
