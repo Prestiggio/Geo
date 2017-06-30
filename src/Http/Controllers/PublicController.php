@@ -5,6 +5,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Ry\Geo\Models\Country;
 use Ry\Geo\Models\Ville;
+use Ry\Geo\Models\Adresse;
 
 class PublicController extends Controller
 {
@@ -22,6 +23,35 @@ class PublicController extends Controller
 	
 	public function getNgsearch() {
 		return view("rygeo::ngsearch");
+	}
+	
+	public function generate($ar) {
+		$adresse = Adresse::where("raw", "LIKE", $ar["adresse"]["raw"])->first();
+		
+		if(!$adresse) {
+			$country = Country::where ( "nom", "LIKE", $ar ["adresse"] ["ville"] ["country"] ["nom"] )->first ();
+			if (! $country) {
+				$country = new Country ();
+				$country->nom = $ar ["adresse"] ["ville"] ["country"] ["nom"];
+				$country->save ();
+			}
+			
+			$ville = $country->villes ()->where ( "nom", "LIKE", $ar ["adresse"] ["ville"] ["nom"] )->first ();
+			if (! $ville) {
+				$ville = $country->villes ()->create ( [
+						"nom" => $ar ["adresse"] ["ville"] ["nom"]
+				] );
+			}
+			
+			$adresse = new Adresse ();
+			$adresse->ville_id = $ville->id;
+			$adresse->raw = $ar ["adresse"] ["raw"];
+			$adresse->lat = isset($ar["adresse"]["lat"]) ? $ar["adresse"]["lat"] : "0.0";
+			$adresse->lng = isset($ar["adresse"]["lng"]) ? $ar["adresse"]["lng"] : "0.0";
+			$adresse->save ();
+		}
+		
+		return $adresse;
 	}
 }
 ?>
