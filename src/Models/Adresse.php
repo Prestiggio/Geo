@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Ry\Geo\Http\Controllers\BotController;
 
 class Adresse extends Model {
 
@@ -90,7 +91,7 @@ class Adresse extends Model {
 	
 	public static function form($form, $model) {
 		$form->where();
-		$form->expect(action("\Ry\Geo\Http\Controllers\BotController@postPosition") . "?model=" . $model);
+		$form->expect(BotController::class . "@postPosition", $model);
 	}
 
 }
