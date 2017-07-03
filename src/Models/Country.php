@@ -10,6 +10,8 @@ class Country extends Model {
 	protected $table = "ry_geo_countries";
 	
 	protected $appends = ["slug"];
+	
+	protected $fillable = ["nom"];
 
 	public function villes() {
 		return $this->hasMany("Ry\Geo\Models\Ville", "country_id");

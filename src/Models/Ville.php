@@ -10,6 +10,8 @@ class Ville extends Model {
 	protected $table = "ry_geo_villes";
 	
 	protected $with = ["country"];
+
+	protected $fillable = ["nom"];
 	
 	public function country() {
 		return $this->belongsTo("Ry\Geo\Models\Country", "country_id");

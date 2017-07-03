@@ -39,7 +39,8 @@ class PublicController extends Controller
 			$ville = $country->villes ()->where ( "nom", "LIKE", $ar ["adresse"] ["ville"] ["nom"] )->first ();
 			if (! $ville) {
 				$ville = $country->villes ()->create ( [
-						"nom" => $ar ["adresse"] ["ville"] ["nom"]
+						"nom" => $ar ["adresse"] ["ville"] ["nom"],
+						"cp" => isset($ar ["adresse"] ["ville"] ["cp"]) ? $ar ["adresse"] ["ville"] ["cp"] : ""
 				] );
 			}
 			
