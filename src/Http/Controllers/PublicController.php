@@ -46,11 +46,13 @@ class PublicController extends Controller
 			
 			$adresse = new Adresse ();
 			$adresse->ville_id = $ville->id;
-			$adresse->raw = $ar ["adresse"] ["raw"];
-			$adresse->lat = isset($ar["adresse"]["lat"]) ? $ar["adresse"]["lat"] : "0.0";
-			$adresse->lng = isset($ar["adresse"]["lng"]) ? $ar["adresse"]["lng"] : "0.0";
-			$adresse->save ();
 		}
+		
+		$adresse->raw = $ar ["adresse"] ["raw"];
+		$adresse->lat = isset($ar["adresse"]["lat"]) ? $ar["adresse"]["lat"] : "-18.913396429147";
+		$adresse->lng = isset($ar["adresse"]["lng"]) ? $ar["adresse"]["lng"] : "47.521104812622";
+		
+		$adresse->save ();
 		
 		return $adresse;
 	}

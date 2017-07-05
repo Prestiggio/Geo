@@ -73,18 +73,47 @@ class Adresse extends Model {
 	}
 	
 	public static function locate($ar) {
-		if(isset($ar["ville"]) && isset($ar["ville"]["id"])) {
-			return self::where("ville_id", "=", $ar["ville"]["id"])->get();
+		if(is_array($ar)){
+			if(isset($ar["ville"]) && isset($ar["ville"]["id"])) {
+				return self::where("ville_id", "=", $ar["ville"]["id"])->get();
+			}
+			elseif(isset($ar["country"]) && isset($ar["country"]["id"])) {
+				$country = Country::where("id", "=", $ar["country"]["id"])->first();
+				$ar = [];
+				foreach($country->villes as $ville) {
+					foreach($ville->adresses as $adresse) {
+						$ar[] = $adresse;
+					}
+				}
+				return new Collection($ar);
+			}
 		}
-		elseif(isset($ar["country"]) && isset($ar["country"]["id"])) {
-			$country = Country::where("id", "=", $ar["country"]["id"])->first();
+		elseif(is_string($ar)) {
+			$q = $ar;
 			$ar = [];
-			foreach($country->villes as $ville) {
-				foreach($ville->adresses as $adresse) {
-					$ar[] = $adresse;
+			$results = app("rymd.search")->search("adresse", $q);
+			foreach($results as $result) {
+				foreach($result as $row) {
+					$ar[$row->id] = $row;
 				}
 			}
-			return new Collection($ar);
+			$results = app("rymd.search")->search("ville", $q);
+			foreach($results as $result) {
+				foreach($result as $row) {
+					foreach($row->adresses as $adresse)
+						$ar[$adresse->id] = $adresse;
+				}
+			}
+			$results = app("rymd.search")->search("country", $q);
+			foreach($results as $result) {
+				foreach($result as $row) {
+					foreach($row->villes as $ville) {
+						foreach($ville->adresses as $adresse)
+							$ar[$adresse->id] = $adresse;
+					}
+				}
+			}
+			return new Collection(array_values($ar));
 		}
 		return [];
 	}
