@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Ry\Geo\Models\Country;
 use Ry\Geo\Models\Ville;
 use Ry\Geo\Models\Adresse;
+use Illuminate\Database\Eloquent\Model;
 
 class PublicController extends Controller
 {
@@ -26,31 +27,56 @@ class PublicController extends Controller
 	}
 	
 	public function generate($ar) {
-		$adresse = Adresse::where("raw", "LIKE", $ar["adresse"]["raw"])->first();
+		$adresse = Adresse::where("raw", "LIKE", $ar["raw"])->first();
 		
 		if(!$adresse) {
-			$country = Country::where ( "nom", "LIKE", $ar ["adresse"] ["ville"] ["country"] ["nom"] )->first ();
-			if (! $country) {
-				$country = new Country ();
-				$country->nom = $ar ["adresse"] ["ville"] ["country"] ["nom"];
-				$country->save ();
+			
+			Model::unguard ();
+			
+			$country = false;
+			$ville = false;
+			if(isset($ar["ville"]["country"]["id"]) && $ar["ville"]["country"]["id"] > 0) {
+				$country = Country::where("id", "=", $ar["ville"]["country"]["id"])->first();
+			}
+			elseif(isset($ar  ["ville"] ["country"] ["nom"])){
+				$country = Country::where ( "nom", "LIKE", $ar  ["ville"] ["country"] ["nom"] )->first ();
 			}
 			
-			$ville = $country->villes ()->where ( "nom", "LIKE", $ar ["adresse"] ["ville"] ["nom"] )->first ();
-			if (! $ville) {
+			if (!$country) {
+				$country = new Country ();
+				$country->nom = $ar  ["ville"] ["country"] ["nom"];
+				$country->save ();
+				
 				$ville = $country->villes ()->create ( [
-						"nom" => $ar ["adresse"] ["ville"] ["nom"],
-						"cp" => isset($ar ["adresse"] ["ville"] ["cp"]) ? $ar ["adresse"] ["ville"] ["cp"] : ""
+						"nom" => $ar  ["ville"] ["nom"],
+						"cp" => isset($ar  ["ville"] ["cp"]) ? $ar  ["ville"] ["cp"] : ""
 				] );
 			}
+			else {
+				if(isset($ar["ville"]["id"]) && $ar["ville"]["id"]>0) {
+					$ville = $country->villes ()->where ( "id", "LIKE", $ar  ["ville"] ["id"] )->first ();
+				}
+				elseif(isset($ar  ["ville"] ["nom"])) {
+					$ville = $country->villes ()->where ( "nom", "LIKE", $ar  ["ville"] ["nom"] )->first ();
+				}
+				
+				if (! $ville) {
+					$ville = $country->villes ()->create ( [
+							"nom" => $ar  ["ville"] ["nom"],
+							"cp" => isset($ar  ["ville"] ["cp"]) ? $ar  ["ville"] ["cp"] : ""
+					] );
+				}
+			}
+			
+			Model::unguard ();
 			
 			$adresse = new Adresse ();
 			$adresse->ville_id = $ville->id;
 		}
 		
-		$adresse->raw = $ar ["adresse"] ["raw"];
-		$adresse->lat = isset($ar["adresse"]["lat"]) ? $ar["adresse"]["lat"] : "-18.913396429147";
-		$adresse->lng = isset($ar["adresse"]["lng"]) ? $ar["adresse"]["lng"] : "47.521104812622";
+		$adresse->raw = $ar  ["raw"];
+		$adresse->lat = isset($ar["lat"]) ? $ar["lat"] : "-18.913396429147";
+		$adresse->lng = isset($ar["lng"]) ? $ar["lng"] : "47.521104812622";
 		
 		$adresse->save ();
 		
