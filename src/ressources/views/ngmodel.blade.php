@@ -1,5 +1,4 @@
-<ng-form name="frm_geo" layout="column">
-	<h4>Localisation</h4>
+<ng-form name="frm_geo">
 	<md-input-container>
 		<label>@lang("rygeo::overall.address")</label>
 		<input type="text" name="adresse_raw" ng-model="data.raw" required/>
