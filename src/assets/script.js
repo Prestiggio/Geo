@@ -8,7 +8,7 @@
 			initDeferred.resolve();
 		};
 
-		$.getScript("//maps.googleapis.com/maps/api/js?key="+$app.data.conf.google.key+"&callback=initMap");
+		$.getScript("//maps.googleapis.com/maps/api/js?key="+$app.data.conf.google.key+"&libraries=drawing&callback=initMap");
 		
 		return initDeferred.promise;
 	}]).directive("rymap", ["rygoogle", function(rygoogle){
