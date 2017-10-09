@@ -9,6 +9,8 @@ class Country extends Model {
 	
 	protected $table = "ry_geo_countries";
 	
+	protected $visible = ["id", "nom", "slug"];
+	
 	protected $appends = ["slug"];
 	
 	protected $fillable = ["nom"];
