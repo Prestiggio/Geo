@@ -54,7 +54,8 @@ class PublicController extends Controller
 			}
 			else {
 				if(isset($ar["ville"]["id"]) && $ar["ville"]["id"]>0) {
-					$ville = $country->villes ()->where ( "id", "LIKE", $ar  ["ville"] ["id"] )->first ();
+					$ville = $country->villes ()->where ( "id", "=", $ar  ["ville"] ["id"] )
+					->where("nom", "LIKE", $ar  ["ville"] ["nom"])->first ();
 				}
 				elseif(isset($ar  ["ville"] ["nom"])) {
 					$ville = $country->villes ()->where ( "nom", "LIKE", $ar  ["ville"] ["nom"] )->first ();
