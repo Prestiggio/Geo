@@ -29,10 +29,7 @@ class PublicController extends Controller
 	public function generate($ar) {
 		$adresse = Adresse::where("raw", "LIKE", $ar["raw"])->first();
 		
-		if(!$adresse) {
-			
-			Model::unguard ();
-			
+		if(!$adresse) {			
 			$country = false;
 			$ville = false;
 			if(isset($ar["ville"]["country"]["id"]) && $ar["ville"]["country"]["id"] > 0) {
@@ -42,6 +39,7 @@ class PublicController extends Controller
 				$country = Country::where ( "nom", "LIKE", $ar  ["ville"] ["country"] ["nom"] )->first ();
 			}
 			
+			Ville::unguard();
 			if (!$country) {
 				$country = new Country ();
 				$country->nom = $ar  ["ville"] ["country"] ["nom"];
@@ -67,10 +65,8 @@ class PublicController extends Controller
 							"cp" => isset($ar  ["ville"] ["cp"]) ? $ar  ["ville"] ["cp"] : ""
 					] );
 				}
-			}
-			
-			Model::unguard ();
-			
+			}	
+			Ville::reguard();	
 			$adresse = new Adresse ();
 			$adresse->ville_id = $ville->id;
 		}
