@@ -9,7 +9,7 @@ class Ville extends Model {
 
 	protected $table = "ry_geo_villes";
 	
-	protected $with = ["country"];
+	//protected $with = ["country"];
 
 	protected $fillable = ["nom"];
 	

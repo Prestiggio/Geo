@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class Adresse extends Model {
 
-	protected $with = ["ville"];
+	//protected $with = ["ville"];
 	
 	protected $table = "ry_geo_adresses";
 	
@@ -16,11 +16,11 @@ class Adresse extends Model {
 	}
 	
 	public static function firstOrCreateFromBulk(array $attributes) {
-		Model::unguard();
+
 		
 		$address = app("\Ry\Geo\Http\Controllers\PublicController")->generate($attributes);
 		
-		Model::reguard();
+
 		
 		return $address;
 	}
