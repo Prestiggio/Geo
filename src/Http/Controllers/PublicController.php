@@ -72,6 +72,7 @@ class PublicController extends Controller
 		}
 		
 		$adresse->raw = $ar  ["raw"];
+		$adresse->raw2 = isset($ar["raw2"]) ? $ar["raw2"] : null;
 		$adresse->lat = isset($ar["lat"]) ? $ar["lat"] : "-18.913396429147";
 		$adresse->lng = isset($ar["lng"]) ? $ar["lng"] : "47.521104812622";
 		
