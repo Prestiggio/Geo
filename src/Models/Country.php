@@ -14,6 +14,14 @@ class Country extends Model {
 	protected $appends = ["slug"];
 	
 	protected $fillable = ["nom"];
+	
+	protected static function boot() {
+	    parent::boot();
+	    
+	    static::addGlobalScope("localefirst", function($a){
+	        $a->orderByRaw("FIELD(nom, 'France') DESC, nom ASC");
+	    });
+	}
 
 	public function villes() {
 		return $this->hasMany("Ry\Geo\Models\Ville", "country_id");

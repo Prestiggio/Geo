@@ -27,6 +27,9 @@ class PublicController extends Controller
 	}
 	
 	public function generate($ar) {
+	    if(!isset($ar["raw"]))
+	        return;
+	    
 		$adresse = Adresse::where("raw", "LIKE", $ar["raw"])->first();
 		
 		if(!$adresse) {			
