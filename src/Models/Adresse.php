@@ -75,5 +75,9 @@ class Adresse extends Model {
 		$form->where();
 		$form->expect(BotController::class . "@postPosition", $model);
 	}
+	
+	public function getGeocodableAttribute() {
+	    return $this->raw . ', ' . $this->ville->cp . ' ' . $this->ville->nom . ', ' . $this->ville->country->nom;
+	}
 
 }

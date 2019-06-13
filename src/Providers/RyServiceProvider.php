@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Ry\Geo\Models\Country;
 use Ry\Geo\Models\Ville;
+use Ry\Geo\Console\Commands\Geocoder;
 
 class RyServiceProvider extends ServiceProvider
 {
@@ -57,6 +58,11 @@ class RyServiceProvider extends ServiceProvider
     {
     	$this->app->register(\Ry\Analytics\Providers\RyServiceProvider::class);
     	$this->app->register(\Ry\Socin\Providers\RyServiceProvider::class);
+    	
+    	$this->app->singleton('rygeo.code', function(){
+    	    return new Geocoder();
+    	});
+    	$this->commands(['rygeo.code']);
     }
     public function map()
     {    	
