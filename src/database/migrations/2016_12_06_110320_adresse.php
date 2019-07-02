@@ -17,6 +17,7 @@ class Adresse extends Migration {
 			$table->increments('id');
 			$table->integer("ville_id")->nullable();
 			$table->char("raw");
+			$table->char("raw2")->nullable();
 			$table->char("lat", 50)->nullable();
 			$table->char("lng", 50)->nullable();
 			$table->timestamps();
