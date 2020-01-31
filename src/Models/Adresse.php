@@ -4,10 +4,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Ry\Geo\Http\Controllers\BotController;
 use Illuminate\Support\Facades\Log;
+use Ry\Profile\Models\Traits\JoinableTrait;
 
 class Adresse extends Model {
 
 	//protected $with = ["ville"];
+	
+    use JoinableTrait;
 	
 	protected $table = "ry_geo_adresses";
 	
