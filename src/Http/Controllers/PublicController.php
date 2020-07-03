@@ -39,7 +39,9 @@ class PublicController extends Controller
 			$ville = $this->generateVilleChanged($ar['ville']);
 		}
 		else {
-		    $ville = $this->generateVilleChanged($ar['ville'], (isset($ar['ville']['id']) && $ar['ville']['id'] != $adresse->ville_id)||(isset($ar['ville']['country']['id']) && $ar['ville']['country']['id'] != $adresse->ville->country_id));
+		    $ville = $this->generateVilleChanged($ar['ville'], (isset($ar['ville']['id']) && $ar['ville']['id'] != $adresse->ville_id)
+		        ||(isset($ar['ville']['cp']) && $ar['ville']['cp'] != $adresse->ville->cp)
+		        ||(isset($ar['ville']['country']['id']) && $ar['ville']['country']['id'] != $adresse->ville->country_id));
 		}
 		
 		$adresse->ville_id = $ville->id;
