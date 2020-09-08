@@ -8,6 +8,8 @@ trait Geoable
 	}
 	
 	public function getCompleteAddressAttribute() {
+	    if(!$this->adresse)
+	         return '';
 		return $this->adresse->raw . "<br/>" . $this->adresse->ville->cp . " " . $this->adresse->ville->nom . "<br/>" . $this->adresse->ville->country->nom;
 	}
 	
