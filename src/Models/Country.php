@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Eloquent\Model;
 use Ry\Analytics\Models\Traits\LinkableTrait;
+use Illuminate\Support\Str;
 
 class Country extends Model {
 	
@@ -26,7 +27,7 @@ class Country extends Model {
 	}
 	
 	public function getSlugAttribute() {
-		return str_slug($this->nom);
+		return Str::slug($this->nom);
 	}
 
 }
